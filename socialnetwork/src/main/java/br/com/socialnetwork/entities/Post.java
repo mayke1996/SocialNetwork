@@ -1,17 +1,14 @@
 package br.com.socialnetwork.entities;
 
-import java.awt.Image;
 import java.io.Serializable;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -34,18 +31,17 @@ public class Post implements Serializable {
 	private Long id;
 
 	@Column(name = "usuario_id")
-	@OneToOne(fetch = FetchType.LAZY)
 	private Long userId;
 
-	@Column(name = "comentario_id")
-	@OneToMany(fetch = FetchType.LAZY)
-	private List<Comment> commentsId;
+//	@OneToMany
+//	@JoinColumn(name = "comentario_id")
+//	private Comment comment;
 
 	@Column(name = "texto")
 	private String text;
 
 	@Column(name = "imagem")
-	private Image image;
+	private byte[] image;
 
 	@Column(name = "link")
 	private String link;

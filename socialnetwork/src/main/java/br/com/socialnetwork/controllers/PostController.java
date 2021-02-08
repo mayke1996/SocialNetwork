@@ -1,7 +1,5 @@
 package br.com.socialnetwork.controllers;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.socialnetwork.entities.Post;
-import br.com.socialnetwork.repository.PostRepository;
+import br.com.socialnetwork.services.PostService;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -24,53 +22,26 @@ import br.com.socialnetwork.repository.PostRepository;
 public class PostController {
 
 	@Autowired
-	private PostRepository postRepository;
+	private PostService postService;
 
 	@GetMapping("/post/{postId}")
 	public ResponseEntity<Post> getPostById(@PathVariable("postId") Long postId) {
-		Optional<Post> postData = postRepository.findById(postId);
-		if (postData.isPresent()) {
-			return new ResponseEntity<>(postData.get(), HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+		return postService.getPostById(postId);
 	}
 
 	@PostMapping("/post")
 	public ResponseEntity<Post> createPost(@RequestBody Post post) {
-		try {
-			Post postData = postRepository.save(post);
-			return new ResponseEntity<>(postData, HttpStatus.CREATED);
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		return postService.createPost(post);
 	}
 
 	@PutMapping("/post/{postId}")
-	public ResponseEntity<Post> updateUser(@PathVariable("postId") Long postId, @RequestBody Post post) {
-		Optional<Post> postData = postRepository.findById(postId);
-
-		if (postData.isPresent()) {
-			Post postForUpdate = postData.get();
-			postForUpdate.setCommentsId(post.getCommentsId());
-			postForUpdate.setImage(post.getImage());
-			postForUpdate.setLink(post.getLink());
-			postForUpdate.setText(post.getText());
-			postForUpdate.setUserId(post.getUserId());
-			return new ResponseEntity<>(postRepository.save(postForUpdate), HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+	public ResponseEntity<Post> updatePost(@PathVariable("postId") Long postId, @RequestBody Post post) {
+		return postService.updatePost(postId, post);
 	}
 
 	@DeleteMapping("/post/{postId}")
-	public ResponseEntity<HttpStatus> deleteUser(@PathVariable("postId") Long postId) {
-		try {
-			postRepository.deleteById(postId);
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		} catch (Exception e) {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+	public ResponseEntity<HttpStatus> deletePost(@PathVariable("postId") Long postId) {
+		return postService.deletePost(postId);
 	}
 
 }
