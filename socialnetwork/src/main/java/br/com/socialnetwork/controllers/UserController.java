@@ -20,7 +20,7 @@ import br.com.socialnetwork.repository.UserRepository;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/v1")
 public class UserController {
 	
 	@Autowired
@@ -62,7 +62,7 @@ public class UserController {
 	  }
 	 
 	 @DeleteMapping("/user/{id}")
-	  public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") long id) {
+	  public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") Long id) {
 	    try {
 	      userRepository.deleteById(id);
 	      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
